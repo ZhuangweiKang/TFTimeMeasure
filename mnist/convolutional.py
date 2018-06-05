@@ -248,21 +248,16 @@ def main(_):
       0.95,               # Decay rate.
       staircase=True)
 
-  start_training = time.time()
-
+  
   # Use simple momentum for the optimization.
   optimizer = tf.train.MomentumOptimizer(learning_rate,
                                          0.9).minimize(loss,
                                                        global_step=batch)
-  end_training = time.time()
-
-  print('Duration is: %f' % (end_training - start_training))
-
   # Predictions for the current training minibatch.
-  # train_prediction = tf.nn.softmax(logits)
+  train_prediction = tf.nn.softmax(logits)
 
   # Predictions for the test and validation, which we'll compute less often.
-  # eval_prediction = tf.nn.softmax(model(eval_data))
+  eval_prediction = tf.nn.softmax(model(eval_data))
 
   # Small utility function to evaluate a dataset by feeding batches of data to
   # {eval_data} and pulling the results from {eval_predictions}.
