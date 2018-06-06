@@ -167,16 +167,19 @@ def main(_):
                           stddev=0.1,
                           seed=SEED, dtype=data_type()))
   conv1_biases = tf.Variable(tf.zeros([32], dtype=data_type()))
+
   conv2_weights = tf.Variable(tf.truncated_normal(
       [5, 5, 32, 64], stddev=0.1,
       seed=SEED, dtype=data_type()))
   conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=data_type()))
+  
   fc1_weights = tf.Variable(  # fully connected, depth 512.
       tf.truncated_normal([IMAGE_SIZE // 4 * IMAGE_SIZE // 4 * 64, 512],
                           stddev=0.1,
                           seed=SEED,
                           dtype=data_type()))
   fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=data_type()))
+  
   fc2_weights = tf.Variable(tf.truncated_normal([512, NUM_LABELS],
                                                 stddev=0.1,
                                                 seed=SEED,
@@ -197,6 +200,7 @@ def main(_):
                         padding='SAME')
     # Bias and rectified linear non-linearity.
     relu = tf.nn.relu(tf.nn.bias_add(conv, conv1_biases))
+    
     # Max pooling. The kernel size spec {ksize} also follows the layout of
     # the data. Here we have a pooling window of 2, and a stride of 2.
     pool = tf.nn.max_pool(relu,
@@ -208,6 +212,7 @@ def main(_):
                         strides=[1, 1, 1, 1],
                         padding='SAME')
     relu = tf.nn.relu(tf.nn.bias_add(conv, conv2_biases))
+    
     pool = tf.nn.max_pool(relu,
                           ksize=[1, 2, 2, 1],
                           strides=[1, 2, 2, 1],
@@ -215,9 +220,11 @@ def main(_):
     # Reshape the feature map cuboid into a 2D matrix to feed it to the
     # fully connected layers.
     pool_shape = pool.get_shape().as_list()
+    
     reshape = tf.reshape(
         pool,
         [pool_shape[0], pool_shape[1] * pool_shape[2] * pool_shape[3]])
+    
     # Fully connected layer. Note that the '+' operation automatically
     # broadcasts the biases.
     hidden = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)  
@@ -241,12 +248,13 @@ def main(_):
   # Optimizer: set up a variable that's incremented once per batch and
   # controls the learning rate decay.
   batch = tf.Variable(0, dtype=data_type())
+
   # Decay once per epoch, using an exponential schedule starting at 0.01.
   learning_rate = tf.train.exponential_decay(
       0.01,                # Base learning rate.
       batch * BATCH_SIZE,  # Current index into the dataset.
       train_size,          # Decay step.
-      0.00,               # Decay rate.
+      0.95,               # Decay rate.
       staircase=True)
 
   
