@@ -246,7 +246,7 @@ def main(_):
       0.01,                # Base learning rate.
       batch * BATCH_SIZE,  # Current index into the dataset.
       train_size,          # Decay step.
-      0.95,               # Decay rate.
+      0.00,               # Decay rate.
       staircase=True)
 
   
