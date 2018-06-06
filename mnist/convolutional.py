@@ -38,13 +38,14 @@ import tensorflow as tf
 SOURCE_URL = 'https://storage.googleapis.com/cvdf-datasets/mnist/'
 WORK_DIRECTORY = 'data'
 IMAGE_SIZE = 28
-NUM_CHANNELS = 1
-PIXEL_DEPTH = 255
+NUM_CHANNELS = 1 # Channel指的是图像的信道，彩色RGB就是三个信道，黑白的就只有一个信道
+PIXEL_DEPTH = 255 # 指的是存储每个像素所用的位数
 NUM_LABELS = 10
-VALIDATION_SIZE = 5000  # Size of the validation set.
-SEED = 66478  # Set to None for random seed.
-BATCH_SIZE = 64
-NUM_EPOCHS = 10
+VALIDATION_SIZE = 5000  # Size of the validation set.验证数据集
+SEED = 66478  # Set to None for random seed. numpy指定随机数生成算法是的开始值
+BATCH_SIZE = 64 # 批量大小指的是一次迭代所使用的数据量
+NUM_EPOCHS = 10 # 一个epoch指的是将数据集中的所有数据都训练一遍
+
 EVAL_BATCH_SIZE = 64  # Evaluation batch size
 EVAL_FREQUENCY = 100  # Number of steps between evaluations.
 
