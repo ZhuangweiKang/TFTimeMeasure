@@ -123,7 +123,13 @@ def error_rate(predictions, labels):
       predictions.shape[0])
 
 
-def main(use_fp16, self_test, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
+def main(_):
+  
+  test_id = FLAGS.index
+  BATCH_SIZE = FLAGS.BATCH_SIZE
+  base_learning_rate = FLAGS.base_learning_rate
+  learning_decay_rate = FLAGS.learning_decay_rate
+
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
@@ -372,14 +378,14 @@ if __name__ == '__main__':
         tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.')
         tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.')
 
-        tf.app.flags.DEFINE_integer('index', index, None)
-        tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), None)
-        tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, None)
-        tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None)
+        tf.app.flags.DEFINE_integer('index', index, 'The test index.')
+        tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), 'This is the batch size.')
+        tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, 'This is the base learning rate.')
+        tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None, 'This is the learning decay.')
         
-        FLAGS = tf.app.flags.FLAGS
+        FLAGS, unparsed = parser.parse_known_args()
 
-        tf.app.run(main=main, argv=sys.argv[:])
+        tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
         
         index += 1
         init_learning_dacay -= 0.1
