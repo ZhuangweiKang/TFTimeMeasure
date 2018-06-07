@@ -54,7 +54,6 @@ EVAL_FREQUENCY = 100  # Number of steps between evaluations.
 
 FLAGS = None
 
-total_training_time = 0.00
 
 def data_type():
   """Return the type of the activations, weights, and placeholder variables."""
@@ -129,6 +128,7 @@ def main(_):
   BATCH_SIZE = FLAGS.BATCH_SIZE
   base_learning_rate = FLAGS.base_learning_rate
   learning_decay_rate = FLAGS.learning_decay_rate
+  total_training_time = 0.00
 
   if FLAGS.self_test:
     print('Running self-test.')
