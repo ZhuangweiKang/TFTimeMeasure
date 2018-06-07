@@ -364,8 +364,6 @@ if __name__ == '__main__':
   
   FLAGS, unparsed = parser.parse_known_args()
   
-  init_batch_size = 8
-
   index = 0
   for i in range(3, 10):
     init_base_learning_rate = 0.01
