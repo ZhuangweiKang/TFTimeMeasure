@@ -374,7 +374,7 @@ if __name__ == '__main__':
         tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None)
         
         FLAGS, unparsed = parser.parse_known_args()
-        tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+        tf.app.run(main=main, argv=[sys.argv[:]] + unparsed)
         
         index += 1
         init_learning_dacay -= 0.1
