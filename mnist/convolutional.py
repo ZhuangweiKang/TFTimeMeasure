@@ -366,7 +366,7 @@ if __name__ == '__main__':
       action='store_true',
       help='True if running a self test.')
   '''
-  
+
   with open('test_result.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
@@ -387,6 +387,10 @@ if __name__ == '__main__':
         
         FLAGS, unparsed = parser.parse_known_args()
 
+        print(sys.argv)
+        print(unparsed)
+        print(FLAGS)
+        
         tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
         
         index += 1
