@@ -352,8 +352,9 @@ def main(_):
 
 
 if __name__ == '__main__':
-  '''
   parser = argparse.ArgumentParser()
+
+  '''
   parser.add_argument(
       '--use_fp16',
       default=False,
@@ -365,6 +366,7 @@ if __name__ == '__main__':
       action='store_true',
       help='True if running a self test.')
   '''
+  
   with open('test_result.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
