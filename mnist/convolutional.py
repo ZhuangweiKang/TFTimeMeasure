@@ -374,8 +374,8 @@ if __name__ == '__main__':
   for i in range(3, 10):
     base_learning_rate = 0.01
     while base_learning_rate <= 0.1:
-      learning_dacay = 1
-      while learning_dacay >= 0.5:
+      learning_decay_rate = 1
+      while learning_decay_rate >= 0.5:
         tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.')
         tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.')
 
@@ -389,5 +389,5 @@ if __name__ == '__main__':
         tf.app.run(main=main, argv=[sys.argv[0]])
         
         index += 1
-        init_learning_dacay -= 0.1
-      init_base_learning_rate += 0.01
+        learning_decay_rate -= 0.1
+      base_learning_rate += 0.01
