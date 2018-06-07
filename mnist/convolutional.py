@@ -123,7 +123,7 @@ def error_rate(predictions, labels):
       predictions.shape[0])
 
 
-def main(_, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
+def main(use_fp16, self_test, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
@@ -346,6 +346,7 @@ def main(_, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
 
 
 if __name__ == '__main__':
+  '''
   parser = argparse.ArgumentParser()
   parser.add_argument(
       '--use_fp16',
@@ -357,7 +358,7 @@ if __name__ == '__main__':
       default=False,
       action='store_true',
       help='True if running a self test.')
-
+  '''
   with open('test_result.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
@@ -368,13 +369,17 @@ if __name__ == '__main__':
     while base_learning_rate <= 0.1:
       learning_dacay = 1
       while learning_dacay >= 0.5:
+        tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.', 'store_true')
+        tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.', 'store_true')
+
         tf.app.flags.DEFINE_integer('index', index, None)
         tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), None)
         tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, None)
         tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None)
         
-        FLAGS, unparsed = parser.parse_known_args()
-        tf.app.run(main=main, argv=[sys.argv[0], FLAGS.index, FLAGS.BATCH_SIZE, FLAGS.base_learning_rate, FLAGS.learning_dacay] + unparsed)
+        FLAGS = tf.app.flags.FLAGS
+
+        tf.app.run(main=main, argv=[FLAGS.use_fp16, FLAGS.self_test, FLAGS.index, FLAGS.BATCH_SIZE, FLAGS.base_learning_rate, FLAGS.learning_dacay])
         
         index += 1
         init_learning_dacay -= 0.1
