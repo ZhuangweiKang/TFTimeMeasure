@@ -367,21 +367,25 @@ if __name__ == '__main__':
   parser.add_argument(
       '--index',
       default=0,
+      type=int
       help='The test index.')
 
   parser.add_argument(
       '--BATCH_SIZE',
       default=8,
+      type=int
       help='This is the batch size.')
 
   parser.add_argument(
       '--base_learning_rate',
       default=0.01,
+      type=float
       help='This is the base learning rate.')
 
   parser.add_argument(
       '--learning_decay_rate',
       default=1.0,
+      type=float
       help='This is the learning decay.')
 
   with open('test_result.csv', 'w') as csvfile:
