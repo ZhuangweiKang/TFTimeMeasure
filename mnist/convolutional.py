@@ -382,7 +382,7 @@ if __name__ == '__main__':
         tf.app.flags.DEFINE_integer('index', index, 'The test index.')
         tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), 'This is the batch size.')
         tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, 'This is the base learning rate.')
-        tf.app.flags.DEFINE_float('learning_dacay_rate', learning_dacay_rate, 'This is the learning decay.')
+        tf.app.flags.DEFINE_float('learning_decay_rate', learning_decay_rate, 'This is the learning decay.')
         
         FLAGS = tf.app.flags.FLAGS
         
