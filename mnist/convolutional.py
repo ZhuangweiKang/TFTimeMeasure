@@ -388,7 +388,7 @@ if __name__ == '__main__':
       type=float,
       help='This is the learning decay.')
 
-  with open('test_result.csv', 'w') as csvfile:
+  with open('test_result.csv', 'a') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
 
