@@ -28,8 +28,10 @@ import gzip
 import os
 import sys
 import time
+import math
 
 import numpy
+import csv
 from six.moves import urllib
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
@@ -43,7 +45,7 @@ PIXEL_DEPTH = 255 # 指的是存储每个像素所用的位数
 NUM_LABELS = 10
 VALIDATION_SIZE = 5000  # Size of the validation set.验证数据集
 SEED = 66478  # Set to None for random seed. numpy指定随机数生成算法是的开始值
-BATCH_SIZE = 64 # 批量大小指的是一次迭代所使用的数据量
+# BATCH_SIZE = 64 # 批量大小指的是一次迭代所使用的数据量
 NUM_EPOCHS = 10 # 一个epoch指的是将数据集中的所有数据都训练一遍
 
 EVAL_BATCH_SIZE = 64  # Evaluation batch size
@@ -52,6 +54,7 @@ EVAL_FREQUENCY = 100  # Number of steps between evaluations.
 
 FLAGS = None
 
+total_training_time = 0.00
 
 def data_type():
   """Return the type of the activations, weights, and placeholder variables."""
@@ -120,7 +123,7 @@ def error_rate(predictions, labels):
       predictions.shape[0])
 
 
-def main(_):
+def main(_, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
@@ -251,10 +254,10 @@ def main(_):
 
   # Decay once per epoch, using an exponential schedule starting at 0.01.
   learning_rate = tf.train.exponential_decay(
-      0.01,                # Base learning rate.
+      base_learning_rate,                # Base learning rate.
       batch * BATCH_SIZE,  # Current index into the dataset.
       train_size,          # Decay step.
-      0.95,               # Decay rate.
+      learning_decay_rate,               # Decay rate.
       staircase=True)
 
   
@@ -302,6 +305,7 @@ def main(_):
       # Note that we could use better randomization across epochs.
       offset = (step * BATCH_SIZE) % (train_size - BATCH_SIZE)
       batch_data = train_data[offset:(offset + BATCH_SIZE), ...]
+
       batch_labels = train_labels[offset:(offset + BATCH_SIZE)]
       # This dictionary maps the batch data (as a numpy array) to the
       # node in the graph it should be fed to.
@@ -315,6 +319,9 @@ def main(_):
         l, lr, predictions = sess.run([loss, learning_rate, train_prediction],
                                       feed_dict=feed_dict)
         elapsed_time = time.time() - start_time
+
+        total_training_time += elapsed_time
+        
         start_time = time.time()
         print('Step %d (epoch %.2f), %.1f ms' %
               (step, float(step) * BATCH_SIZE / train_size,
@@ -332,6 +339,11 @@ def main(_):
       assert test_error == 0.0, 'expected 0.0 test_error, got %.2f' % (
           test_error,)
 
+    with open('test_result.csv', 'a') as result_file:
+      writer = csv.writer(result_file)
+      writer.writerow([test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate, total_training_time, test_error])
+
+
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -346,5 +358,21 @@ if __name__ == '__main__':
       action='store_true',
       help='True if running a self test.')
 
+  with open('test_result.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
+  
   FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+  
+  init_batch_size = 8
+
+  index = 0
+  for i in range(3, 10):
+    init_base_learning_rate = 0.01
+    while init_base_learning_rate <= 0.1:
+      init_learning_dacay = 1
+      while init_learning_dacay <= 0.5:
+        init_learning_dacay += 0.1
+        tf.app.run(main=main, argv=[sys.argv[0], index, math.pow(2, i), init_base_learning_rate, init_learning_dacay] + unparsed)
+        index += 1
+      init_base_learning_rate += 0.01
