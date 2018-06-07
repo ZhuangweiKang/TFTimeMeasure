@@ -125,11 +125,13 @@ def error_rate(predictions, labels):
 
 def main(_):
 
+  '''
   test_id = FLAGS.index
   BATCH_SIZE = FLAGS.BATCH_SIZE
   base_learning_rate = FLAGS.base_learning_rate
   learning_decay_rate = FLAGS.learning_decay_rate
-
+  '''
+  
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
@@ -387,10 +389,6 @@ if __name__ == '__main__':
         
         FLAGS, unparsed = parser.parse_known_args()
 
-        print(sys.argv)
-        print(unparsed)
-        print(FLAGS)
-        
         tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
         
         index += 1
