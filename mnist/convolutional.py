@@ -123,7 +123,7 @@ def error_rate(predictions, labels):
       predictions.shape[0])
 
 
-def main(_, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
+def main(test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
