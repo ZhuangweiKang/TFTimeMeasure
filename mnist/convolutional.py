@@ -124,7 +124,7 @@ def error_rate(predictions, labels):
 
 
 def main(_):
-  
+
   test_id = FLAGS.index
   BATCH_SIZE = FLAGS.BATCH_SIZE
   base_learning_rate = FLAGS.base_learning_rate
@@ -381,7 +381,7 @@ if __name__ == '__main__':
         tf.app.flags.DEFINE_integer('index', index, 'The test index.')
         tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), 'This is the batch size.')
         tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, 'This is the base learning rate.')
-        tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None, 'This is the learning decay.')
+        tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, 'This is the learning decay.')
         
         FLAGS, unparsed = parser.parse_known_args()
 
