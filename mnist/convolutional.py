@@ -123,7 +123,7 @@ def error_rate(predictions, labels):
       predictions.shape[0])
 
 
-def main(_, use_fp16, self_test, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
+def main(use_fp16, self_test, test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate):
   if FLAGS.self_test:
     print('Running self-test.')
     train_data, train_labels = fake_data(256)
@@ -379,7 +379,7 @@ if __name__ == '__main__':
         
         FLAGS = tf.app.flags.FLAGS
 
-        tf.app.run(main=main, argv=[sys.argv[0:]])
+        tf.app.run(main=main, argv=[FLAGS.use_fp16, FLAGS.self_test, FLAGS.index, FLAGS.BATCH_SIZE, FLAGS.base_learning_rate, FLAGS.learning_dacay])
         
         index += 1
         init_learning_dacay -= 0.1
