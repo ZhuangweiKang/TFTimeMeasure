@@ -369,8 +369,8 @@ if __name__ == '__main__':
     while base_learning_rate <= 0.1:
       learning_dacay = 1
       while learning_dacay >= 0.5:
-        tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.', 'store_true')
-        tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.', 'store_true')
+        tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.')
+        tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.')
 
         tf.app.flags.DEFINE_integer('index', index, None)
         tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), None)
