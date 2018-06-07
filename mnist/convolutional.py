@@ -379,7 +379,7 @@ if __name__ == '__main__':
         
         FLAGS = tf.app.flags.FLAGS
 
-        tf.app.run(main=main, argv=[sys.argv[:]])
+        tf.app.run(main=main, argv=[sys.argv[0:]])
         
         index += 1
         init_learning_dacay -= 0.1
