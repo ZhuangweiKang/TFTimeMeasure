@@ -347,6 +347,11 @@ def main(_):
 
     with open('test_result.csv', 'a') as result_file:
       writer = csv.writer(result_file)
+      print('BATCH_SIZE: %d' % BATCH_SIZE)
+      print('base_learning_rate: %f' % base_learning_rate)
+      print('learning_decay_rate: %f' % learning_decay_rate)
+      print('Total Time: %f' % total_training_time)
+      print('Test error: %f' % test_error)
       writer.writerow([test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate, total_training_time, test_error])
 
 
