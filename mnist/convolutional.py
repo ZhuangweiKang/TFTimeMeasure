@@ -371,6 +371,6 @@ if __name__ == '__main__':
       init_learning_dacay = 1
       while init_learning_dacay <= 0.5:
         init_learning_dacay += 0.1
-        tf.app.run(main=main, argv=[sys.argv[0], index, math.pow(2, i), init_base_learning_rate, init_learning_dacay] + unparsed)
+        tf.app.run(main=main, argv=[index, math.pow(2, i), init_base_learning_rate, init_learning_dacay, ])
         index += 1
       init_base_learning_rate += 0.01
