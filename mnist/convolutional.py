@@ -362,15 +362,20 @@ if __name__ == '__main__':
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
   
-  FLAGS, unparsed = parser.parse_known_args()
-  
   index = 0
   for i in range(3, 10):
-    init_base_learning_rate = 0.01
-    while init_base_learning_rate <= 0.1:
-      init_learning_dacay = 1
-      while init_learning_dacay >= 0.5:
-        tf.app.run(main=main, argv=[sys.argv[0], index, math.pow(2, i), init_base_learning_rate, init_learning_dacay] + unparsed)
+    base_learning_rate = 0.01
+    while base_learning_rate <= 0.1:
+      learning_dacay = 1
+      while learning_dacay >= 0.5:
+        tf.app.flags.DEFINE_integer('index', index, None)
+        tf.app.flags.DEFINE_integer('BATCH_SIZE', math.pow(2, i), None)
+        tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, None)
+        tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None)
+        
+        FLAGS, unparsed = parser.parse_known_args()
+        tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+        
         index += 1
         init_learning_dacay -= 0.1
       init_base_learning_rate += 0.01
