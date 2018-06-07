@@ -369,7 +369,7 @@ if __name__ == '__main__':
       learning_dacay = 1
       while learning_dacay >= 0.5:
         tf.app.flags.DEFINE_integer('index', index, None)
-        tf.app.flags.DEFINE_integer('BATCH_SIZE', math.pow(2, i), None)
+        tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), None)
         tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, None)
         tf.app.flags.DEFINE_float('learning_dacay', learning_dacay, None)
         
