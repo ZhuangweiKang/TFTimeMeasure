@@ -352,7 +352,6 @@ def main(_):
 
 
 if __name__ == '__main__':
-  '''
   parser = argparse.ArgumentParser()
   parser.add_argument(
       '--use_fp16',
@@ -364,30 +363,30 @@ if __name__ == '__main__':
       default=False,
       action='store_true',
       help='True if running a self test.')
-  '''
+  
+  parser.add_argument(
+      '--index',
+      default=0,
+      help='The test index.')
+
+  parser.add_argument(
+      '--BATCH_SIZE',
+      default=8,
+      help='This is the batch size.')
+
+  parser.add_argument(
+      '--base_learning_rate',
+      default=0.01,
+      help='This is the base learning rate.')
+
+  parser.add_argument(
+      '--learning_decay_rate',
+      default=1.0,
+      help='This is the learning decay.')
 
   with open('test_result.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
-  
-  index = 0
-  for i in range(3, 10):
-    base_learning_rate = 0.01
-    while base_learning_rate <= 0.1:
-      learning_decay_rate = 1
-      while learning_decay_rate >= 0.5:
-        tf.app.flags.DEFINE_boolean('use_fp16', False, 'Use half floats instead of full floats if True.')
-        tf.app.flags.DEFINE_boolean('self_test', False, 'True if running a self test.')
 
-        tf.app.flags.DEFINE_integer('index', index, 'The test index.')
-        tf.app.flags.DEFINE_integer('BATCH_SIZE', int(math.pow(2, i)), 'This is the batch size.')
-        tf.app.flags.DEFINE_float('base_learning_rate', base_learning_rate, 'This is the base learning rate.')
-        tf.app.flags.DEFINE_float('learning_decay_rate', learning_decay_rate, 'This is the learning decay.')
-        
-        FLAGS = tf.app.flags.FLAGS
-        
-        tf.app.run(main=main, argv=[sys.argv[0]])
-        
-        index += 1
-        learning_decay_rate -= 0.1
-      base_learning_rate += 0.01
+  FLAGS, unparsed = parser.parse_known_args()
+  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
