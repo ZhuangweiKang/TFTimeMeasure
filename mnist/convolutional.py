@@ -129,6 +129,7 @@ def main(_):
   base_learning_rate = FLAGS.base_learning_rate
   learning_decay_rate = FLAGS.learning_decay_rate
   total_training_time = 0.00
+  dropout_rate =  FLAGS.dropout_rate
 
   if FLAGS.self_test:
     print('Running self-test.')
@@ -240,7 +241,7 @@ def main(_):
     # Add a 50% dropout during training only. Dropout also scales
     # activations such that no rescaling is needed at evaluation time.
     if train:
-      hidden = tf.nn.dropout(hidden, 0.5, seed=SEED)
+      hidden = tf.nn.dropout(hidden, dropout_rate, seed=SEED)
     return tf.matmul(hidden, fc2_weights) + fc2_biases
 
   # Training computation: logits + cross-entropy loss.
@@ -393,9 +394,11 @@ if __name__ == '__main__':
       type=float,
       help='This is the learning decay.')
 
-  with open('test_result.csv', 'a') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
-
+  parser.add_argument(
+      '--dropout_rate',
+      default=0.5,
+      type=float,
+      help='This is the dropout rate.')
+  
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
