@@ -1,0 +1,1 @@
+Test_id,Batchsize,Base_learning_rate,Learning_decay_rate,Dropout_rate,Total_learning_time,Test_error

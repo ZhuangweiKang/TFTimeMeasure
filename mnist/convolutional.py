@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +28,8 @@ from __future__ import print_function
 import argparse
 import gzip
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 import sys
 import time
 import math
@@ -128,8 +132,8 @@ def main(_):
   BATCH_SIZE = FLAGS.BATCH_SIZE
   base_learning_rate = FLAGS.base_learning_rate
   learning_decay_rate = FLAGS.learning_decay_rate
-  total_training_time = 0.00
   dropout_rate =  FLAGS.dropout_rate
+  total_training_time = 0.00
 
   if FLAGS.self_test:
     print('Running self-test.')
@@ -182,14 +186,14 @@ def main(_):
       [5, 5, 32, 64], stddev=0.1,
       seed=SEED, dtype=data_type()))
   conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=data_type()))
-  
+
   fc1_weights = tf.Variable(  # fully connected, depth 512.
       tf.truncated_normal([IMAGE_SIZE // 4 * IMAGE_SIZE // 4 * 64, 512],
                           stddev=0.1,
                           seed=SEED,
                           dtype=data_type()))
   fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=data_type()))
-  
+
   fc2_weights = tf.Variable(tf.truncated_normal([512, NUM_LABELS],
                                                 stddev=0.1,
                                                 seed=SEED,
@@ -210,7 +214,7 @@ def main(_):
                         padding='SAME')
     # Bias and rectified linear non-linearity.
     relu = tf.nn.relu(tf.nn.bias_add(conv, conv1_biases))
-    
+
     # Max pooling. The kernel size spec {ksize} also follows the layout of
     # the data. Here we have a pooling window of 2, and a stride of 2.
     pool = tf.nn.max_pool(relu,
@@ -222,7 +226,7 @@ def main(_):
                         strides=[1, 1, 1, 1],
                         padding='SAME')
     relu = tf.nn.relu(tf.nn.bias_add(conv, conv2_biases))
-    
+
     pool = tf.nn.max_pool(relu,
                           ksize=[1, 2, 2, 1],
                           strides=[1, 2, 2, 1],
@@ -230,11 +234,11 @@ def main(_):
     # Reshape the feature map cuboid into a 2D matrix to feed it to the
     # fully connected layers.
     pool_shape = pool.get_shape().as_list()
-    
+
     reshape = tf.reshape(
         pool,
         [pool_shape[0], pool_shape[1] * pool_shape[2] * pool_shape[3]])
-    
+
     # Fully connected layer. Note that the '+' operation automatically
     # broadcasts the biases.
     hidden = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)  
@@ -267,7 +271,7 @@ def main(_):
       learning_decay_rate,               # Decay rate.
       staircase=True)
 
-  
+
   # Use simple momentum for the optimization.
   optimizer = tf.train.MomentumOptimizer(learning_rate,
                                          0.9).minimize(loss,
@@ -328,7 +332,7 @@ def main(_):
         elapsed_time = time.time() - start_time
 
         total_training_time += elapsed_time
-        
+
         start_time = time.time()
         print('Step %d (epoch %.2f), %.1f ms' %
               (step, float(step) * BATCH_SIZE / train_size,
@@ -365,13 +369,13 @@ if __name__ == '__main__':
       default=False,
       help='Use half floats instead of full floats if True.',
       action='store_true')
-  
+
   parser.add_argument(
       '--self_test',
       default=False,
       action='store_true',
       help='True if running a self test.')
-  
+
   parser.add_argument(
       '--index',
       default=0,
@@ -401,6 +405,7 @@ if __name__ == '__main__':
       default=0.5,
       type=float,
       help='This is the dropout rate.')
-  
+
   FLAGS, unparsed = parser.parse_known_args()
+
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
