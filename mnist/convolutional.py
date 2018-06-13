@@ -351,9 +351,10 @@ def main(_):
       print('BATCH_SIZE: %d' % BATCH_SIZE)
       print('base_learning_rate: %f' % base_learning_rate)
       print('learning_decay_rate: %f' % learning_decay_rate)
+      print('dropout_rate: %f' % dropout_rate)
       print('Total Time: %f' % total_training_time)
       print('Test error: %f' % test_error)
-      writer.writerow([test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate, total_training_time, test_error])
+      writer.writerow([test_id, BATCH_SIZE, base_learning_rate, learning_decay_rate, dropout_rate, total_training_time, test_error])
 
 
 
@@ -364,6 +365,7 @@ if __name__ == '__main__':
       default=False,
       help='Use half floats instead of full floats if True.',
       action='store_true')
+  
   parser.add_argument(
       '--self_test',
       default=False,

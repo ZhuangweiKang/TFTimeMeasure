@@ -4,7 +4,7 @@ import math
 if __name__ == '__main__':
   with open('test_result.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Total_learning_time', 'Test_error'])
+    writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Dropout_rate', 'Total_learning_time', 'Test_error'])
 
   index = 0
   for i in range(0, 10):
@@ -18,7 +18,7 @@ if __name__ == '__main__':
           ' --BATCH_SIZE ' + str(int(math.pow(2, i))) + 
           ' --base_learning_rate ' + str(base_learning_rate) + 
           ' --learning_decay_rate ' + str(learning_decay_rate) + 
-          '--dropout_rate' + str()
+          ' --dropout_rate' + str()
           print(os.popen(cmd).read())
           dropout_rate -= 0.1
         index += 1
