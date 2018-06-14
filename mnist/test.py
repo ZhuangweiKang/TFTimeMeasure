@@ -14,7 +14,7 @@ if __name__ == '__main__':
     writer.writerow(['Test_id', 'Batchsize', 'Base_learning_rate', 'Learning_decay_rate', 'Dropout_rate', 'Total_learning_time', 'Test_error'])
 
   index = 0
-  for i in range(10, 2, -1):
+  for i in range(6, 8):
     base_learning_rate = 0.01
     while base_learning_rate <= 0.1:
       learning_decay_rate = 1
